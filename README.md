@@ -1,85 +1,259 @@
 # moschooldata
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/almartin82/moschooldata/workflows/R-CMD-check/badge.svg)](https://github.com/almartin82/moschooldata/actions)
+[![R-CMD-check](https://github.com/almartin82/moschooldata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almartin82/moschooldata/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/almartin82/moschooldata/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/almartin82/moschooldata/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
-`moschooldata` is an R package for fetching, processing, and analyzing school enrollment data from the Missouri Department of Elementary and Secondary Education (DESE). It provides a programmatic interface to public school data via the Missouri Comprehensive Data System (MCDS), enabling researchers, analysts, and education policy professionals to easily access Missouri public school data.
+**[Documentation](https://almartin82.github.io/moschooldata/)** | **[Getting Started](https://almartin82.github.io/moschooldata/articles/quickstart.html)**
 
-## Installation
+Fetch and analyze Missouri public school enrollment data from the Department of Elementary and Secondary Education (DESE).
 
-You can install the development version of moschooldata from GitHub:
+## What can you find with moschooldata?
 
-```r
-# install.packages("devtools")
-devtools::install_github("almartin82/moschooldata")
-```
+**20 years of enrollment data (2006-2025).** 870,000 students. 550+ districts. Here are ten stories hiding in the numbers:
 
-## Quick Start
+---
+
+### 1. St. Louis City: A district in crisis
+
+St. Louis Public Schools has lost over 50% of its enrollment since 2000, now serving under 20,000 students.
 
 ```r
 library(moschooldata)
+library(dplyr)
 
-# Get 2024 enrollment data (2023-24 school year)
-enr_2024 <- fetch_enr(2024)
+enr <- fetch_enr_multi(c(2006, 2010, 2015, 2020, 2025))
 
-# Get wide format (one row per school/district)
-enr_wide <- fetch_enr(2024, tidy = FALSE)
-
-# Get multiple years
-enr_multi <- fetch_enr_multi(2020:2024)
-
-# Filter to a specific district (Kansas City 33)
-kc <- enr_2024 %>%
-  dplyr::filter(district_id == "048078")
-
-# Get state totals over time
-state_totals <- enr_multi %>%
-  dplyr::filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  dplyr::select(end_year, n_students)
+enr %>%
+  filter(is_district, district_id == "115115",
+         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  select(end_year, district_name, n_students)
 ```
 
-## Data Availability
+![St. Louis decline](man/figures/stl-decline.png)
 
-### Years Available
+---
 
-| Format Era | Years | Description |
-|------------|-------|-------------|
-| **MCDS Current** | 2018-2025 | Current SSRS report format |
-| **MCDS Legacy** | 2006-2017 | Legacy format with some column differences |
+### 2. Kansas City 33 isn't much better
 
-**Total**: 20 years of historical data (2006-2025)
+KCPS has lost nearly half its students, now enrolling around 14,000.
 
-### Available Data
+```r
+enr %>%
+  filter(is_district, district_id == "048078",
+         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  select(end_year, district_name, n_students)
+```
 
-- **Aggregation Levels**: State, District, Building (Campus)
-- **Demographics**: White, Black, Hispanic, Asian, Pacific Islander, Native American, Multiracial
-- **Special Populations**: Free/Reduced Lunch (Economically Disadvantaged), LEP/ELL, Special Education (IEP)
-- **Grade Levels**: PK, K, 1-12
+![Kansas City decline](man/figures/kc-decline.png)
 
-### Known Caveats
+---
 
-1. **Data Suppression**: Missouri DESE suppresses data for cells with 5 or fewer students to protect privacy. These appear as NA values.
+### 3. Suburban St. Louis County is fragmenting
 
-2. **Charter Schools**: Charter school reporting may vary. Charter status is indicated by the `charter_flag` column when available.
+With dozens of tiny districts, St. Louis County has the most fragmented school system in America.
 
-3. **Building vs Campus**: Missouri uses "building" terminology rather than "campus", but this package standardizes to "campus" for consistency with other state packages.
+```r
+enr_2025 <- fetch_enr(2025)
 
-4. **County-District Codes**: Missouri uses a 6-digit county-district code where the first 3 digits represent the county and the last 3 represent the district within that county.
+# Count districts under 2,000 students
+enr_2025 %>%
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  mutate(size = case_when(
+    n_students < 500 ~ "Under 500",
+    n_students < 1000 ~ "500-999",
+    n_students < 2000 ~ "1,000-1,999",
+    n_students < 5000 ~ "2,000-4,999",
+    TRUE ~ "5,000+"
+  )) %>%
+  group_by(size) %>%
+  summarize(n_districts = n())
+```
 
-5. **October Count**: Enrollment figures are based on October membership counts as reported to DESE.
+![District fragmentation](man/figures/fragmentation.png)
 
-## ID System
+---
 
-Missouri uses a hierarchical county-district-building code system:
+### 4. Springfield is stable
 
-| Identifier | Format | Example | Description |
-|------------|--------|---------|-------------|
-| **County-District Code** | 6 digits | 048078 | First 3 = county (048 = Jackson), Last 3 = district (078 = Kansas City 33) |
-| **Building Code** | 4 digits | 1234 | Unique within district |
-| **Full Campus ID** | 10 digits | 0480781234 | County-District + Building |
+Missouri's third-largest city has maintained consistent enrollment around 25,000 students.
 
-### Major Districts
+```r
+enr %>%
+  filter(is_district, grepl("Springfield R-XII", district_name),
+         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  select(end_year, n_students)
+```
+
+![Springfield stability](man/figures/springfield-stable.png)
+
+---
+
+### 5. Missouri is diversifying slowly
+
+The state has gone from 80% white to about 70% white, with Hispanic students driving the change.
+
+```r
+enr %>%
+  filter(is_state, grade_level == "TOTAL",
+         subgroup %in% c("white", "black", "hispanic", "asian")) %>%
+  mutate(pct = round(pct * 100, 1)) %>%
+  select(end_year, subgroup, pct)
+```
+
+![Demographics](man/figures/demographics.png)
+
+---
+
+### 6. COVID crushed kindergarten
+
+Missouri lost over 10,000 kindergartners in 2021, a drop of nearly 14%.
+
+```r
+enr <- fetch_enr_multi(2018:2025)
+
+enr %>%
+  filter(is_state, subgroup == "total_enrollment",
+         grade_level %in% c("PK", "K", "01", "06", "12")) %>%
+  select(end_year, grade_level, n_students)
+```
+
+![COVID kindergarten](man/figures/covid-k.png)
+
+---
+
+### 7. Charter schools concentrated in cities
+
+Missouri's charter schools are limited to Kansas City and St. Louis by law, serving over 30,000 students.
+
+```r
+enr_2025 %>%
+  filter(is_charter, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  summarize(
+    total_charter = sum(n_students, na.rm = TRUE),
+    n_schools = n()
+  )
+```
+
+![Charter enrollment](man/figures/charter-enrollment.png)
+
+---
+
+### 8. Columbia grows with the university
+
+Home to Mizzou, Columbia 93 is one of the few mid-Missouri districts gaining students.
+
+```r
+enr %>%
+  filter(is_district, grepl("Columbia 93", district_name),
+         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  select(end_year, n_students)
+```
+
+![Columbia growth](man/figures/columbia-growth.png)
+
+---
+
+### 9. Economic disadvantage is widespread
+
+Over 50% of Missouri students are economically disadvantaged, with rates exceeding 80% in many rural and urban districts.
+
+```r
+enr_2025 %>%
+  filter(is_district, subgroup == "econ_disadv", grade_level == "TOTAL") %>%
+  arrange(desc(pct)) %>%
+  mutate(pct = round(pct * 100, 1)) %>%
+  select(district_name, n_students, pct) %>%
+  head(10)
+```
+
+![Economic disadvantage](man/figures/econ-disadvantage.png)
+
+---
+
+### 10. The Ozarks are aging out
+
+Rural districts in the Ozarks region have lost 20-30% of students as young families leave.
+
+```r
+ozarks <- c("Mountain Grove", "West Plains", "Willow Springs", "Cabool")
+
+enr %>%
+  filter(is_district, grepl(paste(ozarks, collapse = "|"), district_name),
+         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  select(end_year, district_name, n_students)
+```
+
+![Ozarks decline](man/figures/ozarks-decline.png)
+
+---
+
+## Installation
+
+```r
+# install.packages("remotes")
+remotes::install_github("almartin82/moschooldata")
+```
+
+## Quick start
+
+```r
+library(moschooldata)
+library(dplyr)
+
+# Fetch one year
+enr_2025 <- fetch_enr(2025)
+
+# Fetch multiple years
+enr_multi <- fetch_enr_multi(2020:2025)
+
+# State totals
+enr_2025 %>%
+  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL")
+
+# Largest districts
+enr_2025 %>%
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
+  arrange(desc(n_students)) %>%
+  head(15)
+
+# Kansas City demographics
+enr_2025 %>%
+  filter(district_id == "048078", grade_level == "TOTAL",
+         subgroup %in% c("white", "black", "hispanic", "asian")) %>%
+  select(subgroup, n_students, pct)
+```
+
+## Data availability
+
+| Years | Source | Notes |
+|-------|--------|-------|
+| **2018-2025** | MCDS Current | Current SSRS report format |
+| **2006-2017** | MCDS Legacy | Legacy format with some column differences |
+
+Data is sourced from the Missouri Department of Elementary and Secondary Education:
+- MCDS Portal: https://apps.dese.mo.gov/MCDS/home.aspx
+- School Data: https://dese.mo.gov/school-data
+
+### What's included
+
+- **Levels:** State, District (~550), Building (campus)
+- **Demographics:** White, Black, Hispanic, Asian, Pacific Islander, Native American, Multiracial
+- **Special populations:** Economically disadvantaged (Free/Reduced Lunch), English learners, Special education
+- **Grade levels:** PK through 12
+
+### Missouri-specific notes
+
+- **County-District Code:** 6 digits (first 3 = county, last 3 = district within county)
+  - Example: 048078 = Jackson County (048) + Kansas City 33 (078)
+- **Building Code:** 4 digits appended to district code
+- **Full Campus ID:** 10 digits (district + building)
+- **Data suppression:** Cells with 5 or fewer students are suppressed
+- **October membership counts:** Enrollment figures are based on October counts
+- **Charter schools:** Limited to Kansas City and St. Louis by state law
+
+### Major districts
 
 | District | Code | Notes |
 |----------|------|-------|
@@ -88,80 +262,18 @@ Missouri uses a hierarchical county-district-building code system:
 | Springfield R-XII | 077077 | Third largest district |
 | Columbia 93 | 010004 | University town |
 
-## Output Schema
+## Part of the 50 State Schooldata Family
 
-### Wide Format (`tidy = FALSE`)
+This package is part of a family of R packages providing school enrollment data for all 50 US states. Each package fetches data directly from the state's Department of Education.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| end_year | integer | School year end (2024 = 2023-24) |
-| district_id | character | 6-digit county-district code |
-| campus_id | character | 10-digit building code (NA for districts) |
-| district_name | character | District name |
-| campus_name | character | Building name (NA for districts) |
-| type | character | "State", "District", or "Campus" |
-| county | character | County name |
-| row_total | integer | Total enrollment |
-| white, black, hispanic, asian, pacific_islander, native_american, multiracial | integer | Demographic counts |
-| econ_disadv, lep, special_ed | integer | Special population counts |
-| grade_pk, grade_k, grade_01 ... grade_12 | integer | Grade-level enrollment |
+**See also:** [njschooldata](https://github.com/almartin82/njschooldata) - The original state schooldata package for New Jersey.
 
-### Tidy Format (`tidy = TRUE`, default)
+**All packages:** [github.com/almartin82](https://github.com/almartin82?tab=repositories&q=schooldata)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| end_year | integer | School year end |
-| district_id | character | District identifier |
-| campus_id | character | Campus identifier |
-| district_name | character | District name |
-| campus_name | character | Campus name |
-| type | character | Aggregation level |
-| grade_level | character | "TOTAL", "PK", "K", "01"-"12" |
-| subgroup | character | "total_enrollment", "white", "black", etc. |
-| n_students | integer | Student count |
-| pct | numeric | Percentage of total (0-1 scale) |
-| is_state, is_district, is_campus | logical | Aggregation level flags |
-| is_charter | logical | Charter school indicator |
+## Author
 
-## Data Sources
-
-Data is sourced from the Missouri Department of Elementary and Secondary Education:
-
-- **MCDS Portal**: https://apps.dese.mo.gov/MCDS/home.aspx
-- **School Data**: https://dese.mo.gov/school-data
-- **Data Downloads**: https://dese.mo.gov/school-directory/data-downloads
-- **Building Demographic Data Report**: SSRS Report ID 1bd1a115-127a-4be0-a3ee-41f4680d8761
-
-## Caching
-
-Downloaded data is cached locally to avoid repeated downloads:
-
-```r
-# View cached files
-cache_status()
-
-# Clear all cached data
-clear_cache()
-
-# Clear specific year
-clear_cache(2024)
-
-# Force fresh download
-fetch_enr(2024, use_cache = FALSE)
-```
-
-Cache location: `rappdirs::user_cache_dir("moschooldata")`
-
-## Related Packages
-
-This package is part of a family of state education data packages:
-
-- [txschooldata](https://github.com/almartin82/txschooldata) - Texas
-- [ilschooldata](https://github.com/almartin82/ilschooldata) - Illinois
-- [nyschooldata](https://github.com/almartin82/nyschooldata) - New York
-- [caschooldata](https://github.com/almartin82/caschooldata) - California
-- [paschooldata](https://github.com/almartin82/paschooldata) - Pennsylvania
-- [ohschooldata](https://github.com/almartin82/ohschooldata) - Ohio
+[Andy Martin](https://github.com/almartin82) (almartin@gmail.com)
 
 ## License
+
 MIT
