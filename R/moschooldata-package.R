@@ -1,0 +1,66 @@
+#' moschooldata: Fetch and Process Missouri School Data
+#'
+#' Downloads and processes school data from the Missouri Department of
+#' Elementary and Secondary Education (DESE). Provides functions for fetching
+#' enrollment data from the Missouri Comprehensive Data System (MCDS) and
+#' transforming it into tidy format for analysis.
+#'
+#' @section Main functions:
+#' \describe{
+#'   \item{\code{\link{fetch_enr}}}{Fetch enrollment data for a school year}
+#'   \item{\code{\link{fetch_enr_multi}}}{Fetch enrollment data for multiple years}
+#'   \item{\code{\link{tidy_enr}}}{Transform wide data to tidy (long) format}
+#'   \item{\code{\link{id_enr_aggs}}}{Add aggregation level flags}
+#'   \item{\code{\link{enr_grade_aggs}}}{Create grade-level aggregations}
+#'   \item{\code{\link{get_available_years}}}{Get available data years}
+#' }
+#'
+#' @section Cache functions:
+#' \describe{
+#'   \item{\code{\link{cache_status}}}{View cached data files}
+#'   \item{\code{\link{clear_cache}}}{Remove cached data files}
+#' }
+#'
+#' @section ID System:
+#' Missouri uses a county-district code system:
+#' \itemize{
+#'   \item County-District Code: 6 digits (e.g., 048078 = Kansas City 33)
+#'   \item Building Code: 4 digits appended to district code for 10-digit campus ID
+#'   \item County Code: First 3 digits of district code (e.g., 048 = Jackson County)
+#' }
+#'
+#' @section Data Sources:
+#' Data is sourced from Missouri DESE's MCDS system:
+#' \itemize{
+#'   \item MCDS Portal: \url{https://apps.dese.mo.gov/MCDS/home.aspx}
+#'   \item School Data: \url{https://dese.mo.gov/school-data}
+#'   \item Data Downloads: \url{https://dese.mo.gov/school-directory/data-downloads}
+#' }
+#'
+#' @section Format Eras:
+#' Missouri DESE data is available in two format eras:
+#' \itemize{
+#'   \item 2018-present: Current MCDS SSRS report format
+#'   \item 2006-2017: Legacy MCDS format with some column differences
+#' }
+#'
+#' @docType package
+#' @name moschooldata-package
+#' @aliases moschooldata
+#' @keywords internal
+"_PACKAGE"
+
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom dplyr %>%
+#' @usage lhs \%>\% rhs
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.
+NULL
