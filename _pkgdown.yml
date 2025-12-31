@@ -1,0 +1,48 @@
+url: https://almartin82.github.io/moschooldata/
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/almartin82/moschooldata
+
+reference:
+- title: Fetch Enrollment Data
+  desc: >
+    Primary functions for downloading enrollment data from Missouri DESE.
+  contents:
+  - fetch_enr
+  - fetch_enr_multi
+  - get_available_years
+
+- title: Transform Data
+  desc: >
+    Functions for transforming enrollment data.
+  contents:
+  - tidy_enr
+  - id_enr_aggs
+  - enr_grade_aggs
+
+- title: Caching
+  desc: >
+    Functions for managing the local data cache.
+  contents:
+  - cache_status
+  - clear_cache
+
+- title: Utilities
+  desc: >
+    Utility functions and operators.
+  contents:
+  - "`%>%`"
+
+authors:
+  Al Martin:
+    href: https://github.com/almartin82

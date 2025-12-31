@@ -1,0 +1,29 @@
+# R package build artifacts
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+src/*.o
+src/*.so
+src/*.dll
+
+# Package documentation
+docs/
+doc/
+Meta/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# pkgdown
+pkgdown/
+
+# testthat snapshots (if any)
+tests/testthat/_snaps/
