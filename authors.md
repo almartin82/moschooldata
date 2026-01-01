@@ -9,11 +9,11 @@
 Source:
 [`DESCRIPTION`](https://github.com/almartin82/moschooldata/blob/main/DESCRIPTION)
 
-Martin A (2026). *moschooldata: Fetch and Process Missouri School Data*.
-R package version 0.1.0, <https://almartin82.github.io/moschooldata>.
+Martin A (2026). *moschooldata: Missouri School Data*. R package version
+0.1.0, <https://almartin82.github.io/moschooldata>.
 
     @Manual{,
-      title = {moschooldata: Fetch and Process Missouri School Data},
+      title = {moschooldata: Missouri School Data},
       author = {Al Martin},
       year = {2026},
       note = {R package version 0.1.0},
