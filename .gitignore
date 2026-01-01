@@ -25,5 +25,8 @@ Thumbs.db
 # pkgdown
 pkgdown/
 
+# Build artifacts
+..Rcheck/
+
 # testthat snapshots (if any)
 tests/testthat/_snaps/
