@@ -1,12 +1,10 @@
 Package: moschooldata
-Title: Fetch and Process Missouri School Data
+Title: Missouri School Data
 Version: 0.1.0
 Authors@R:
     person("Al", "Martin", , "almartin@example.com", role = c("aut", "cre"))
-Description: Downloads and processes school data from the Missouri Department of
-    Elementary and Secondary Education (DESE). Provides functions for fetching
-    enrollment data from the Missouri Comprehensive Data System (MCDS) and
-    transforming it into tidy format for analysis.
+Description: A simple, consistent interface for accessing Missouri
+    school data in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
