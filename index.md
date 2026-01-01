@@ -4,8 +4,8 @@
 **[Getting
 Started](https://almartin82.github.io/moschooldata/articles/quickstart.html)**
 
-Fetch and analyze Missouri public school enrollment data from the
-Department of Elementary and Secondary Education (DESE).
+Fetch and analyze Missouri school enrollment data from the Department of
+Elementary and Secondary Education (DESE) in R or Python.
 
 ## What can you find with moschooldata?
 
@@ -225,6 +225,8 @@ remotes::install_github("almartin82/moschooldata")
 
 ## Quick start
 
+### R
+
 ``` r
 library(moschooldata)
 library(dplyr)
@@ -250,6 +252,28 @@ enr_2025 %>%
   filter(district_id == "048078", grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "asian")) %>%
   select(subgroup, n_students, pct)
+```
+
+### Python
+
+``` python
+import pymoschooldata as mo
+
+# Fetch 2025 data (2024-25 school year)
+enr = mo.fetch_enr(2025)
+
+# Statewide total
+total = enr[enr['is_state'] & (enr['subgroup'] == 'total_enrollment') & (enr['grade_level'] == 'TOTAL')]['n_students'].sum()
+print(f"{total:,} students")
+#> ~870,000 students
+
+# Get multiple years
+enr_multi = mo.fetch_enr_multi([2020, 2021, 2022, 2023, 2024, 2025])
+
+# Check available years
+years = mo.get_available_years()
+print(f"Data available: {years['min_year']}-{years['max_year']}")
+#> Data available: 2006-2025
 ```
 
 ## Data availability
@@ -293,17 +317,12 @@ School Data: <https://dese.mo.gov/school-data>
 | Springfield R-XII | 077077 | Third largest district |
 | Columbia 93       | 010004 | University town        |
 
-## Part of the 50 State Schooldata Family
+## Part of the State Schooldata Project
 
-This package is part of a family of R packages providing school
-enrollment data for all 50 US states. Each package fetches data directly
-from the state’s Department of Education.
+A simple, consistent interface for accessing state-published school data
+in Python and R.
 
-**See also:**
-[njschooldata](https://github.com/almartin82/njschooldata) - The
-original state schooldata package for New Jersey.
-
-**All packages:**
+**All 50 state packages:**
 [github.com/almartin82](https://github.com/almartin82?tab=repositories&q=schooldata)
 
 ## Author
