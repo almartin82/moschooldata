@@ -2,12 +2,13 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/almartin82/moschooldata/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almartin82/moschooldata/actions/workflows/R-CMD-check.yaml)
+[![Python Tests](https://github.com/almartin82/moschooldata/actions/workflows/python-test.yaml/badge.svg)](https://github.com/almartin82/moschooldata/actions/workflows/python-test.yaml)
 [![pkgdown](https://github.com/almartin82/moschooldata/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/almartin82/moschooldata/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
 **[Documentation](https://almartin82.github.io/moschooldata/)** | **[Getting Started](https://almartin82.github.io/moschooldata/articles/quickstart.html)**
 
-Fetch and analyze Missouri public school enrollment data from the Department of Elementary and Secondary Education (DESE).
+Fetch and analyze Missouri school enrollment data from the Department of Elementary and Secondary Education (DESE) in R or Python.
 
 ## What can you find with moschooldata?
 
@@ -198,6 +199,8 @@ remotes::install_github("almartin82/moschooldata")
 
 ## Quick start
 
+### R
+
 ```r
 library(moschooldata)
 library(dplyr)
@@ -223,6 +226,28 @@ enr_2025 %>%
   filter(district_id == "048078", grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "asian")) %>%
   select(subgroup, n_students, pct)
+```
+
+### Python
+
+```python
+import pymoschooldata as mo
+
+# Fetch 2025 data (2024-25 school year)
+enr = mo.fetch_enr(2025)
+
+# Statewide total
+total = enr[enr['is_state'] & (enr['subgroup'] == 'total_enrollment') & (enr['grade_level'] == 'TOTAL')]['n_students'].sum()
+print(f"{total:,} students")
+#> ~870,000 students
+
+# Get multiple years
+enr_multi = mo.fetch_enr_multi([2020, 2021, 2022, 2023, 2024, 2025])
+
+# Check available years
+years = mo.get_available_years()
+print(f"Data available: {years['min_year']}-{years['max_year']}")
+#> Data available: 2006-2025
 ```
 
 ## Data availability
