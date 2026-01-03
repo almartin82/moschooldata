@@ -42,9 +42,9 @@ test_that("parse_county_district_code works correctly", {
   expect_equal(result$county_code, "048")
   expect_equal(result$district_number, "078")
 
-  # With padding
+  # With padding - "1234" pads to "001234", county="001", district="234"
   result2 <- parse_county_district_code("1234")
-  expect_equal(result2$county_code, "000")
+  expect_equal(result2$county_code, "001")
   expect_equal(result2$district_number, "234")
 })
 
