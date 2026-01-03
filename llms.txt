@@ -31,6 +31,10 @@ enr %>%
   select(end_year, district_name, n_students)
 ```
 
+![St. Louis decline](reference/figures/stl-decline.png)
+
+St. Louis decline
+
 ------------------------------------------------------------------------
 
 ### 2. Kansas City 33 isn’t much better
@@ -43,6 +47,10 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, district_name, n_students)
 ```
+
+![Kansas City decline](reference/figures/kc-decline.png)
+
+Kansas City decline
 
 ------------------------------------------------------------------------
 
@@ -68,6 +76,10 @@ enr_2025 %>%
   summarize(n_districts = n())
 ```
 
+![District fragmentation](reference/figures/fragmentation.png)
+
+District fragmentation
+
 ------------------------------------------------------------------------
 
 ### 4. Springfield is stable
@@ -81,6 +93,10 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, n_students)
 ```
+
+![Springfield stability](reference/figures/springfield-stable.png)
+
+Springfield stability
 
 ------------------------------------------------------------------------
 
@@ -97,6 +113,10 @@ enr %>%
   select(end_year, subgroup, pct)
 ```
 
+![Demographics](reference/figures/demographics.png)
+
+Demographics
+
 ------------------------------------------------------------------------
 
 ### 6. COVID crushed kindergarten
@@ -111,6 +131,10 @@ enr %>%
          grade_level %in% c("PK", "K", "01", "06", "12")) %>%
   select(end_year, grade_level, n_students)
 ```
+
+![COVID kindergarten](reference/figures/covid-k.png)
+
+COVID kindergarten
 
 ------------------------------------------------------------------------
 
@@ -128,6 +152,10 @@ enr_2025 %>%
   )
 ```
 
+![Charter enrollment](reference/figures/charter-enrollment.png)
+
+Charter enrollment
+
 ------------------------------------------------------------------------
 
 ### 8. Columbia grows with the university
@@ -141,6 +169,10 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, n_students)
 ```
+
+![Columbia growth](reference/figures/columbia-growth.png)
+
+Columbia growth
 
 ------------------------------------------------------------------------
 
@@ -158,6 +190,10 @@ enr_2025 %>%
   head(10)
 ```
 
+![Economic disadvantage](reference/figures/econ-disadvantage.png)
+
+Economic disadvantage
+
 ------------------------------------------------------------------------
 
 ### 10. The Ozarks are aging out
@@ -173,6 +209,10 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, district_name, n_students)
 ```
+
+![Ozarks decline](reference/figures/ozarks-decline.png)
+
+Ozarks decline
 
 ------------------------------------------------------------------------
 
