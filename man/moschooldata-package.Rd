@@ -63,6 +63,7 @@ Missouri DESE data is available in two format eras:
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://almartin82.github.io/moschooldata}
   \item \url{https://github.com/almartin82/moschooldata}
   \item Report bugs at \url{https://github.com/almartin82/moschooldata/issues}
 }
