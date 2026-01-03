@@ -45,11 +45,11 @@ get_available_years <- function() {
   # - Earlier data may be available in different formats
   list(
     min_year = 2006,
-    max_year = 2025,
-    available_years = 2006:2025,
+    max_year = 2024,
+    available_years = 2006:2024,
     format_eras = list(
       mcds_current = list(
-        years = 2018:2025,
+        years = 2018:2024,
         description = "MCDS SSRS Reports (current format)"
       ),
       mcds_legacy = list(
