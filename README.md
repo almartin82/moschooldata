@@ -33,6 +33,8 @@ enr %>%
   select(end_year, district_name, n_students)
 ```
 
+![St. Louis decline](man/figures/stl-decline.png)
+
 ---
 
 ### 2. Kansas City 33 isn't much better
@@ -45,6 +47,8 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, district_name, n_students)
 ```
+
+![Kansas City decline](man/figures/kc-decline.png)
 
 ---
 
@@ -69,6 +73,8 @@ enr_2025 %>%
   summarize(n_districts = n())
 ```
 
+![District fragmentation](man/figures/fragmentation.png)
+
 ---
 
 ### 4. Springfield is stable
@@ -81,6 +87,8 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, n_students)
 ```
+
+![Springfield stability](man/figures/springfield-stable.png)
 
 ---
 
@@ -95,6 +103,8 @@ enr %>%
   mutate(pct = round(pct * 100, 1)) %>%
   select(end_year, subgroup, pct)
 ```
+
+![Demographics](man/figures/demographics.png)
 
 ---
 
@@ -111,6 +121,8 @@ enr %>%
   select(end_year, grade_level, n_students)
 ```
 
+![COVID kindergarten](man/figures/covid-k.png)
+
 ---
 
 ### 7. Charter schools concentrated in cities
@@ -126,6 +138,8 @@ enr_2025 %>%
   )
 ```
 
+![Charter enrollment](man/figures/charter-enrollment.png)
+
 ---
 
 ### 8. Columbia grows with the university
@@ -138,6 +152,8 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, n_students)
 ```
+
+![Columbia growth](man/figures/columbia-growth.png)
 
 ---
 
@@ -154,6 +170,8 @@ enr_2025 %>%
   head(10)
 ```
 
+![Economic disadvantage](man/figures/econ-disadvantage.png)
+
 ---
 
 ### 10. The Ozarks are aging out
@@ -168,6 +186,8 @@ enr %>%
          subgroup == "total_enrollment", grade_level == "TOTAL") %>%
   select(end_year, district_name, n_students)
 ```
+
+![Ozarks decline](man/figures/ozarks-decline.png)
 
 ---
 
