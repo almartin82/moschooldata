@@ -52,12 +52,38 @@ if (is.list(years)) {
   min_year <- min(years)
 }
 
-# Fetch data
-enr <- fetch_enr_multi((max_year - 7):max_year)
-key_years <- seq(max(min_year, 2006), max_year, by = 5)
-if (!max_year %in% key_years) key_years <- c(key_years, max_year)
-enr_long <- fetch_enr_multi(key_years)
-enr_current <- fetch_enr(max_year)
+# Fetch data with error handling for CI environments
+# Missouri DESE may block requests from GitHub Actions
+data_available <- TRUE
+tryCatch({
+  enr <- fetch_enr_multi((max_year - 7):max_year)
+  key_years <- seq(max(min_year, 2006), max_year, by = 5)
+  if (!max_year %in% key_years) key_years <- c(key_years, max_year)
+  enr_long <- fetch_enr_multi(key_years)
+  enr_current <- fetch_enr(max_year)
+
+  # Check if we got actual data
+  if (nrow(enr) == 0 || nrow(enr_long) == 0 || nrow(enr_current) == 0) {
+    data_available <- FALSE
+    message("No data returned from Missouri DESE - likely running in CI environment")
+  }
+}, error = function(e) {
+  data_available <<- FALSE
+  message("Could not fetch data: ", e$message)
+  # Create empty data frames to avoid downstream errors
+  enr <<- data.frame()
+  enr_long <<- data.frame()
+  enr_current <<- data.frame()
+})
+```
+
+```{r check-data, results='asis'}
+if (!data_available || nrow(enr) == 0) {
+  cat("\n\n**Note:** This vignette requires live data from Missouri DESE. ")
+  cat("Data could not be fetched (common in CI environments). ")
+  cat("Run locally to see full visualizations.\n\n")
+  knitr::knit_exit()
+}
 ```
 
 ## 1. St. Louis City: A district in crisis
