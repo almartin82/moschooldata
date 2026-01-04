@@ -49,9 +49,17 @@ get_raw_enr <- function(end_year) {
     district_data <- download_mcds_district_data_legacy(end_year)
   }
 
-  # Add end_year column
-  building_data$end_year <- end_year
-  district_data$end_year <- end_year
+  # Add end_year column (handle empty dataframes gracefully)
+  if (nrow(building_data) > 0) {
+    building_data$end_year <- end_year
+  } else {
+    building_data$end_year <- integer(0)
+  }
+  if (nrow(district_data) > 0) {
+    district_data$end_year <- end_year
+  } else {
+    district_data$end_year <- integer(0)
+  }
 
   list(
     building = building_data,
