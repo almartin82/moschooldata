@@ -3,6 +3,8 @@
 **[Documentation](https://almartin82.github.io/moschooldata/)** \|
 **[Getting
 Started](https://almartin82.github.io/moschooldata/articles/quickstart.html)**
+\| **[Enrollment
+Trends](https://almartin82.github.io/moschooldata/articles/enrollment-trends.html)**
 
 Fetch and analyze Missouri school enrollment data from the Department of
 Elementary and Secondary Education (DESE) in R or Python.
@@ -10,211 +12,30 @@ Elementary and Secondary Education (DESE) in R or Python.
 ## What can you find with moschooldata?
 
 **20 years of enrollment data (2006-2025).** 870,000 students. 550+
-districts. Here are ten stories hiding in the numbers:
-
-------------------------------------------------------------------------
-
-### 1. St. Louis City: A district in crisis
-
-St. Louis Public Schools has lost over 50% of its enrollment since 2000,
-now serving under 20,000 students.
-
-``` r
-library(moschooldata)
-library(dplyr)
-
-enr <- fetch_enr_multi(c(2006, 2010, 2015, 2020, 2025))
-
-enr %>%
-  filter(is_district, district_id == "115115",
-         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, district_name, n_students)
-```
-
-![St. Louis decline](reference/figures/stl-decline.png)
-
-St. Louis decline
-
-------------------------------------------------------------------------
-
-### 2. Kansas City 33 isn’t much better
-
-KCPS has lost nearly half its students, now enrolling around 14,000.
-
-``` r
-enr %>%
-  filter(is_district, district_id == "048078",
-         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, district_name, n_students)
-```
-
-![Kansas City decline](reference/figures/kc-decline.png)
-
-Kansas City decline
-
-------------------------------------------------------------------------
-
-### 3. Suburban St. Louis County is fragmenting
-
-With dozens of tiny districts, St. Louis County has the most fragmented
-school system in America.
-
-``` r
-enr_2025 <- fetch_enr(2025)
-
-# Count districts under 2,000 students
-enr_2025 %>%
-  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  mutate(size = case_when(
-    n_students < 500 ~ "Under 500",
-    n_students < 1000 ~ "500-999",
-    n_students < 2000 ~ "1,000-1,999",
-    n_students < 5000 ~ "2,000-4,999",
-    TRUE ~ "5,000+"
-  )) %>%
-  group_by(size) %>%
-  summarize(n_districts = n())
-```
-
-![District fragmentation](reference/figures/fragmentation.png)
-
-District fragmentation
-
-------------------------------------------------------------------------
-
-### 4. Springfield is stable
-
-Missouri’s third-largest city has maintained consistent enrollment
-around 25,000 students.
-
-``` r
-enr %>%
-  filter(is_district, grepl("Springfield R-XII", district_name),
-         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, n_students)
-```
-
-![Springfield stability](reference/figures/springfield-stable.png)
-
-Springfield stability
-
-------------------------------------------------------------------------
-
-### 5. Missouri is diversifying slowly
-
-The state has gone from 80% white to about 70% white, with Hispanic
-students driving the change.
-
-``` r
-enr %>%
-  filter(is_state, grade_level == "TOTAL",
-         subgroup %in% c("white", "black", "hispanic", "asian")) %>%
-  mutate(pct = round(pct * 100, 1)) %>%
-  select(end_year, subgroup, pct)
-```
-
-![Demographics](reference/figures/demographics.png)
-
-Demographics
-
-------------------------------------------------------------------------
-
-### 6. COVID crushed kindergarten
-
-Missouri lost over 10,000 kindergartners in 2021, a drop of nearly 14%.
-
-``` r
-enr <- fetch_enr_multi(2018:2025)
-
-enr %>%
-  filter(is_state, subgroup == "total_enrollment",
-         grade_level %in% c("PK", "K", "01", "06", "12")) %>%
-  select(end_year, grade_level, n_students)
-```
-
-![COVID kindergarten](reference/figures/covid-k.png)
-
-COVID kindergarten
-
-------------------------------------------------------------------------
-
-### 7. Charter schools concentrated in cities
-
-Missouri’s charter schools are limited to Kansas City and St. Louis by
-law, serving over 30,000 students.
-
-``` r
-enr_2025 %>%
-  filter(is_charter, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  summarize(
-    total_charter = sum(n_students, na.rm = TRUE),
-    n_schools = n()
-  )
-```
-
-![Charter enrollment](reference/figures/charter-enrollment.png)
-
-Charter enrollment
-
-------------------------------------------------------------------------
-
-### 8. Columbia grows with the university
-
-Home to Mizzou, Columbia 93 is one of the few mid-Missouri districts
-gaining students.
-
-``` r
-enr %>%
-  filter(is_district, grepl("Columbia 93", district_name),
-         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, n_students)
-```
-
-![Columbia growth](reference/figures/columbia-growth.png)
-
-Columbia growth
-
-------------------------------------------------------------------------
-
-### 9. Economic disadvantage is widespread
-
-Over 50% of Missouri students are economically disadvantaged, with rates
-exceeding 80% in many rural and urban districts.
-
-``` r
-enr_2025 %>%
-  filter(is_district, subgroup == "econ_disadv", grade_level == "TOTAL") %>%
-  arrange(desc(pct)) %>%
-  mutate(pct = round(pct * 100, 1)) %>%
-  select(district_name, n_students, pct) %>%
-  head(10)
-```
-
-![Economic disadvantage](reference/figures/econ-disadvantage.png)
-
-Economic disadvantage
-
-------------------------------------------------------------------------
-
-### 10. The Ozarks are aging out
-
-Rural districts in the Ozarks region have lost 20-30% of students as
-young families leave.
-
-``` r
-ozarks <- c("Mountain Grove", "West Plains", "Willow Springs", "Cabool")
-
-enr %>%
-  filter(is_district, grepl(paste(ozarks, collapse = "|"), district_name),
-         subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, district_name, n_students)
-```
-
-![Ozarks decline](reference/figures/ozarks-decline.png)
-
-Ozarks decline
-
-------------------------------------------------------------------------
+districts. Here are ten stories hiding in the numbers (see the
+[Enrollment
+Trends](https://almartin82.github.io/moschooldata/articles/enrollment-trends.html)
+vignette for interactive visualizations):
+
+1.  **St. Louis City: A district in crisis** - Lost over 50% of
+    enrollment since 2000
+2.  **Kansas City 33 isn’t much better** - Lost nearly half its students
+3.  **St. Louis County’s fragmented system** - Dozens of tiny districts,
+    most fragmented in America
+4.  **Springfield is stable** - Third-largest city maintains ~25,000
+    students
+5.  **Missouri is diversifying slowly** - From 80% white to ~70% with
+    Hispanic growth
+6.  **COVID crushed kindergarten** - Lost 10,000+ kindergartners, a 14%
+    drop
+7.  **Charter schools limited to KC and STL** - Over 30,000 students in
+    state-law restricted charters
+8.  **Columbia grows with the university** - One of few mid-Missouri
+    districts gaining students
+9.  **Economic disadvantage is widespread** - Over 50% of students
+    economically disadvantaged
+10. **The Ozarks are aging out** - Rural districts lost 20-30% as young
+    families leave
 
 ## Installation
 

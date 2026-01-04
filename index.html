@@ -32,6 +32,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/enrollment-trends.html">Missouri Enrollment Trends</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -50,182 +56,39 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><strong><a href="https://almartin82.github.io/moschooldata/">Documentation</a></strong> | <strong><a href="https://almartin82.github.io/moschooldata/articles/quickstart.html">Getting Started</a></strong></p>
+<p><strong><a href="https://almartin82.github.io/moschooldata/">Documentation</a></strong> | <strong><a href="https://almartin82.github.io/moschooldata/articles/quickstart.html">Getting Started</a></strong> | <strong><a href="https://almartin82.github.io/moschooldata/articles/enrollment-trends.html">Enrollment Trends</a></strong></p>
 <p>Fetch and analyze Missouri school enrollment data from the Department of Elementary and Secondary Education (DESE) in R or Python.</p>
 <div class="section level2">
 <h2 id="what-can-you-find-with-moschooldata">What can you find with moschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-moschooldata"></a>
 </h2>
-<p><strong>20 years of enrollment data (2006-2025).</strong> 870,000 students. 550+ districts. Here are ten stories hiding in the numbers:</p>
-<hr>
-<div class="section level3">
-<h3 id="id_1-st-louis-city-a-district-in-crisis">1. St. Louis City: A district in crisis<a class="anchor" aria-label="anchor" href="#id_1-st-louis-city-a-district-in-crisis"></a>
-</h3>
-<p>St. Louis Public Schools has lost over 50% of its enrollment since 2000, now serving under 20,000 students.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/moschooldata">moschooldata</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2006</span>, <span class="fl">2010</span>, <span class="fl">2015</span>, <span class="fl">2020</span>, <span class="fl">2025</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">district_id</span> <span class="op">==</span> <span class="st">"115115"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/stl-decline.png" alt="St. Louis decline"><div class="figcaption">St. Louis decline</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_2-kansas-city-33-isnt-much-better">2. Kansas City 33 isn’t much better<a class="anchor" aria-label="anchor" href="#id_2-kansas-city-33-isnt-much-better"></a>
-</h3>
-<p>KCPS has lost nearly half its students, now enrolling around 14,000.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">district_id</span> <span class="op">==</span> <span class="st">"048078"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/kc-decline.png" alt="Kansas City decline"><div class="figcaption">Kansas City decline</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_3-suburban-st-louis-county-is-fragmenting">3. Suburban St. Louis County is fragmenting<a class="anchor" aria-label="anchor" href="#id_3-suburban-st-louis-county-is-fragmenting"></a>
-</h3>
-<p>With dozens of tiny districts, St. Louis County has the most fragmented school system in America.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr_2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2025</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Count districts under 2,000 students</span></span>
-<span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">500</span> <span class="op">~</span> <span class="st">"Under 500"</span>,</span>
-<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">1000</span> <span class="op">~</span> <span class="st">"500-999"</span>,</span>
-<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">2000</span> <span class="op">~</span> <span class="st">"1,000-1,999"</span>,</span>
-<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">5000</span> <span class="op">~</span> <span class="st">"2,000-4,999"</span>,</span>
-<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"5,000+"</span></span>
-<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">size</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n_districts <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/fragmentation.png" alt="District fragmentation"><div class="figcaption">District fragmentation</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_4-springfield-is-stable">4. Springfield is stable<a class="anchor" aria-label="anchor" href="#id_4-springfield-is-stable"></a>
-</h3>
-<p>Missouri’s third-largest city has maintained consistent enrollment around 25,000 students.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Springfield R-XII"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/springfield-stable.png" alt="Springfield stability"><div class="figcaption">Springfield stability</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_5-missouri-is-diversifying-slowly">5. Missouri is diversifying slowly<a class="anchor" aria-label="anchor" href="#id_5-missouri-is-diversifying-slowly"></a>
-</h3>
-<p>The state has gone from 80% white to about 70% white, with Hispanic students driving the change.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">subgroup</span>, <span class="va">pct</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/demographics.png" alt="Demographics"><div class="figcaption">Demographics</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_6-covid-crushed-kindergarten">6. COVID crushed kindergarten<a class="anchor" aria-label="anchor" href="#id_6-covid-crushed-kindergarten"></a>
-</h3>
-<p>Missouri lost over 10,000 kindergartners in 2021, a drop of nearly 14%.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">:</span><span class="fl">2025</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
-<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PK"</span>, <span class="st">"K"</span>, <span class="st">"01"</span>, <span class="st">"06"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/covid-k.png" alt="COVID kindergarten"><div class="figcaption">COVID kindergarten</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_7-charter-schools-concentrated-in-cities">7. Charter schools concentrated in cities<a class="anchor" aria-label="anchor" href="#id_7-charter-schools-concentrated-in-cities"></a>
-</h3>
-<p>Missouri’s charter schools are limited to Kansas City and St. Louis by law, serving over 30,000 students.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_charter</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    total_charter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    n_schools <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/charter-enrollment.png" alt="Charter enrollment"><div class="figcaption">Charter enrollment</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_8-columbia-grows-with-the-university">8. Columbia grows with the university<a class="anchor" aria-label="anchor" href="#id_8-columbia-grows-with-the-university"></a>
-</h3>
-<p>Home to Mizzou, Columbia 93 is one of the few mid-Missouri districts gaining students.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Columbia 93"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/columbia-growth.png" alt="Columbia growth"><div class="figcaption">Columbia growth</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_9-economic-disadvantage-is-widespread">9. Economic disadvantage is widespread<a class="anchor" aria-label="anchor" href="#id_9-economic-disadvantage-is-widespread"></a>
-</h3>
-<p>Over 50% of Missouri students are economically disadvantaged, with rates exceeding 80% in many rural and urban districts.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"econ_disadv"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/econ-disadvantage.png" alt="Economic disadvantage"><div class="figcaption">Economic disadvantage</div>
-</div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_10-the-ozarks-are-aging-out">10. The Ozarks are aging out<a class="anchor" aria-label="anchor" href="#id_10-the-ozarks-are-aging-out"></a>
-</h3>
-<p>Rural districts in the Ozarks region have lost 20-30% of students as young families leave.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ozarks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mountain Grove"</span>, <span class="st">"West Plains"</span>, <span class="st">"Willow Springs"</span>, <span class="st">"Cabool"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enr</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">ozarks</span>, collapse <span class="op">=</span> <span class="st">"|"</span><span class="op">)</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="reference/figures/ozarks-decline.png" alt="Ozarks decline"><div class="figcaption">Ozarks decline</div>
-</div>
-<hr>
-</div>
+<p><strong>20 years of enrollment data (2006-2025).</strong> 870,000 students. 550+ districts. Here are ten stories hiding in the numbers (see the <a href="https://almartin82.github.io/moschooldata/articles/enrollment-trends.html">Enrollment Trends</a> vignette for interactive visualizations):</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>St. Louis City: A district in crisis</strong> - Lost over 50% of enrollment since 2000</li>
+<li>
+<strong>Kansas City 33 isn’t much better</strong> - Lost nearly half its students</li>
+<li>
+<strong>St. Louis County’s fragmented system</strong> - Dozens of tiny districts, most fragmented in America</li>
+<li>
+<strong>Springfield is stable</strong> - Third-largest city maintains ~25,000 students</li>
+<li>
+<strong>Missouri is diversifying slowly</strong> - From 80% white to ~70% with Hispanic growth</li>
+<li>
+<strong>COVID crushed kindergarten</strong> - Lost 10,000+ kindergartners, a 14% drop</li>
+<li>
+<strong>Charter schools limited to KC and STL</strong> - Over 30,000 students in state-law restricted charters</li>
+<li>
+<strong>Columbia grows with the university</strong> - One of few mid-Missouri districts gaining students</li>
+<li>
+<strong>Economic disadvantage is widespread</strong> - Over 50% of students economically disadvantaged</li>
+<li>
+<strong>The Ozarks are aging out</strong> - Rural districts lost 20-30% as young families leave</li>
+</ol>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"almartin82/moschooldata"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -235,7 +98,7 @@
 <div class="section level3">
 <h3 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/moschooldata">moschooldata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -246,41 +109,41 @@
 <span><span class="va">enr_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">:</span><span class="fl">2025</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># State totals</span></span>
-<span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">enr_2025</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Largest districts</span></span>
-<span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">enr_2025</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Kansas City demographics</span></span>
-<span><span class="va">enr_2025</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">enr_2025</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">district_id</span> <span class="op">==</span> <span class="st">"048078"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subgroup</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="im">import</span> pymoschooldata <span class="im">as</span> mo</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># Fetch 2025 data (2024-25 school year)</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>enr <span class="op">=</span> mo.fetch_enr(<span class="dv">2025</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># Statewide total</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>total <span class="op">=</span> enr[enr[<span class="st">'is_state'</span>] <span class="op">&amp;</span> (enr[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span> (enr[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)][<span class="st">'n_students'</span>].<span class="bu">sum</span>()</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total<span class="sc">:,}</span><span class="ss"> students"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; ~870,000 students</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co"># Get multiple years</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>enr_multi <span class="op">=</span> mo.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>, <span class="dv">2025</span>])</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># Check available years</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>years <span class="op">=</span> mo.get_available_years()</span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data available: </span><span class="sc">{</span>years[<span class="st">'min_year'</span>]<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>years[<span class="st">'max_year'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Data available: 2006-2025</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="im">import</span> pymoschooldata <span class="im">as</span> mo</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Fetch 2025 data (2024-25 school year)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>enr <span class="op">=</span> mo.fetch_enr(<span class="dv">2025</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co"># Statewide total</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>total <span class="op">=</span> enr[enr[<span class="st">'is_state'</span>] <span class="op">&amp;</span> (enr[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>) <span class="op">&amp;</span> (enr[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>)][<span class="st">'n_students'</span>].<span class="bu">sum</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total<span class="sc">:,}</span><span class="ss"> students"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; ~870,000 students</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Get multiple years</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>enr_multi <span class="op">=</span> mo.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>, <span class="dv">2025</span>])</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co"># Check available years</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>years <span class="op">=</span> mo.get_available_years()</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data available: </span><span class="sc">{</span>years[<span class="st">'min_year'</span>]<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>years[<span class="st">'max_year'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Data available: 2006-2025</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

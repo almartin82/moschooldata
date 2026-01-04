@@ -30,10 +30,3 @@ Functions for managing the local data cache.
   : Show cache status
 - [`clear_cache()`](https://almartin82.github.io/moschooldata/reference/clear_cache.md)
   : Clear the moschooldata cache
-
-## Utilities
-
-Utility functions and operators.
-
-- [`` `%>%` ``](https://almartin82.github.io/moschooldata/reference/pipe.md)
-  : Pipe operator

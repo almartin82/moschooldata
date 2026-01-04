@@ -75,6 +75,8 @@ Missouri DESE data is available in two format eras:
 
 Useful links:
 
+- <https://almartin82.github.io/moschooldata>
+
 - <https://github.com/almartin82/moschooldata>
 
 - Report bugs at <https://github.com/almartin82/moschooldata/issues>
