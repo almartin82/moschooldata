@@ -50,3 +50,13 @@
 #' @keywords internal
 "_PACKAGE"
 
+# Declare non-standard evaluation variables for dplyr/tidyr
+globalVariables(c(
+  "subgroup",
+  "grade_level",
+  "n_students",
+  "row_total",
+  "type",
+  "charter_flag"
+))
+
