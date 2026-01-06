@@ -24,8 +24,8 @@ colors <- c("total" = "#2C3E50", "white" = "#3498DB", "black" = "#E74C3C",
 ```
 
 ``` r
-# Fetch data
-enr <- fetch_enr_multi(2010:2024)
+# Fetch data (recent years with verified data availability)
+enr <- fetch_enr_multi(2019:2024)
 enr_current <- fetch_enr(2024)
 ```
 
