@@ -24,6 +24,15 @@ process_enr <- function(raw_data, end_year) {
   # Process district data
   district_processed <- process_district_enr(raw_data$district, end_year)
 
+  # Validate that we have some data
+  if (nrow(building_processed) == 0 && nrow(district_processed) == 0) {
+    stop(
+      "No enrollment data available for ", format_school_year(end_year), ". ",
+      "Data source may be broken or year may not be available. ",
+      "Check https://dese.mo.gov/school-data for current data availability."
+    )
+  }
+
   # Create state aggregate
   state_processed <- create_state_aggregate(district_processed, end_year)
 
