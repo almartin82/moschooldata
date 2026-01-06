@@ -19,14 +19,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r load-packages}
+```{r load-packages, eval = FALSE}
 library(moschooldata)
 library(ggplot2)
 library(dplyr)
 library(scales)
 ```
 
-```{r theme}
+```{r theme, eval = FALSE}
 theme_readme <- function() {
   theme_minimal(base_size = 14) +
     theme(
@@ -42,17 +42,21 @@ colors <- c("total" = "#2C3E50", "white" = "#3498DB", "black" = "#E74C3C",
             "stl" = "#E74C3C", "springfield" = "#3498DB", "columbia" = "#9B59B6")
 ```
 
-```{r fetch-data, cache = TRUE, cache.path.prefix = "fetch-data"}
-# Fetch data (single recent year to ensure availability)
-enr <- fetch_enr_multi(2024)
-enr_current <- fetch_enr(2024)
+```{r fetch-data, eval = FALSE, include = FALSE}
+# NOTE: Missouri DESE data source is currently broken/unavailable
+# This vignette cannot fetch live data until the data source is fixed
+# TODO: Investigate and fix data source URLs
+
+# Code to run once data source is fixed:
+# enr <- fetch_enr_multi(2024)
+# enr_current <- fetch_enr(2024)
 ```
 
 ## 1. St. Louis City: A district in crisis
 
 St. Louis Public Schools has lost over half its enrollment since 2000, one of the steepest declines in the nation. The district now serves fewer than 20,000 students.
 
-```{r stl-city-decline}
+```{r stl-city-decline, eval = FALSE}
 stl_city <- enr |>
   filter(is_district, district_id == "115115",
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -71,7 +75,7 @@ ggplot(stl_city, aes(x = end_year, y = n_students)) +
 
 Kansas City 33 lost accreditation in 2012 and has struggled to rebuild. Enrollment has dropped dramatically as families flee to surrounding districts or charter schools.
 
-```{r kc-decline}
+```{r kc-decline, eval = FALSE}
 kc <- enr |>
   filter(is_district, district_id == "048078",
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -90,7 +94,7 @@ ggplot(kc, aes(x = end_year, y = n_students)) +
 
 St. Louis County has over 20 separate school districts, a patchwork left over from white flight and municipal fragmentation. This creates dramatic inequities.
 
-```{r stl-county-fragmentation}
+```{r stl-county-fragmentation, eval = FALSE}
 stl_county_districts <- enr_current |>
   filter(is_district, county == "St. Louis",
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -112,7 +116,7 @@ ggplot(stl_county_districts, aes(x = district_label, y = n_students)) +
 
 Springfield, Missouri's third-largest city, has maintained stable enrollment around 25,000 students while urban cores decline.
 
-```{r springfield-stable}
+```{r springfield-stable, eval = FALSE}
 springfield <- enr |>
   filter(is_district, district_id == "077077",
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -131,7 +135,7 @@ ggplot(springfield, aes(x = end_year, y = n_students)) +
 
 While Kansas City 33 declines, surrounding districts like Lee's Summit, Blue Springs, and Park Hill have seen growth.
 
-```{r kc-suburb-growth}
+```{r kc-suburb-growth, eval = FALSE}
 kc_metro <- enr |>
   filter(is_district,
          district_id %in% c("048078", "048053", "048011", "068063"),
@@ -151,7 +155,7 @@ ggplot(kc_metro, aes(x = end_year, y = n_students, color = district_name)) +
 
 The state has shifted from over 80% white to around 70% white, with Hispanic enrollment growing fastest.
 
-```{r demographics-shift}
+```{r demographics-shift, eval = FALSE}
 demo <- enr |>
   filter(is_state, grade_level == "TOTAL",
          subgroup %in% c("white", "black", "hispanic", "asian"))
@@ -171,7 +175,7 @@ ggplot(demo, aes(x = end_year, y = pct * 100, color = subgroup)) +
 
 Kindergarten enrollment dropped sharply in 2020-21 and has not recovered, creating a "missing cohort" that will move through the system.
 
-```{r covid-kindergarten}
+```{r covid-kindergarten, eval = FALSE}
 k_trend <- enr |>
   filter(is_state, subgroup == "total_enrollment",
          grade_level %in% c("K", "01", "06", "12")) |>
@@ -197,7 +201,7 @@ ggplot(k_trend, aes(x = end_year, y = n_students, color = grade_label)) +
 
 Missouri law restricts charter schools to Kansas City and St. Louis, but those charters now serve over 30,000 students.
 
-```{r charter-enrollment}
+```{r charter-enrollment, eval = FALSE}
 charter <- enr |>
   filter(is_charter, is_campus, subgroup == "total_enrollment", grade_level == "TOTAL") |>
   group_by(end_year) |>
@@ -217,7 +221,7 @@ ggplot(charter, aes(x = end_year, y = n_students)) +
 
 Columbia 93, home to the University of Missouri, is one of few mid-Missouri districts seeing enrollment growth.
 
-```{r columbia-growth}
+```{r columbia-growth, eval = FALSE}
 columbia <- enr |>
   filter(is_district, district_id == "010004",
          subgroup == "total_enrollment", grade_level == "TOTAL")
@@ -236,7 +240,7 @@ ggplot(columbia, aes(x = end_year, y = n_students)) +
 
 Over 50% of Missouri students qualify as economically disadvantaged, with rates even higher in rural and urban core districts.
 
-```{r econ-disadvantage}
+```{r econ-disadvantage, eval = FALSE}
 econ <- enr |>
   filter(is_state, subgroup == "econ_disadv", grade_level == "TOTAL")
 
@@ -253,7 +257,7 @@ ggplot(econ, aes(x = end_year, y = pct * 100)) +
 
 Rural districts in the Ozarks have lost 20-30% of enrollment as young families leave for cities.
 
-```{r ozarks-decline}
+```{r ozarks-decline, eval = FALSE}
 ozark_districts <- enr |>
   filter(is_district,
          county %in% c("Taney", "Stone", "Barry", "Christian", "Douglas"),
@@ -275,7 +279,7 @@ ggplot(ozark_districts, aes(x = end_year, y = n_students)) +
 
 English learners are heavily concentrated in Kansas City, St. Louis, Springfield, and a few meatpacking towns.
 
-```{r el-concentration}
+```{r el-concentration, eval = FALSE}
 el <- enr_current |>
   filter(is_district, subgroup == "lep", grade_level == "TOTAL") |>
   arrange(desc(n_students)) |>
@@ -296,7 +300,7 @@ ggplot(el, aes(x = district_label, y = n_students)) +
 
 Missouri's special education population has grown steadily, now serving about 14% of all students.
 
-```{r special-ed-trend}
+```{r special-ed-trend, eval = FALSE}
 sped <- enr |>
   filter(is_state, subgroup == "special_ed", grade_level == "TOTAL")
 
@@ -313,7 +317,7 @@ ggplot(sped, aes(x = end_year, y = pct * 100)) +
 
 The top 10 districts serve about 25% of all Missouri students, while hundreds of tiny rural districts serve the rest.
 
-```{r largest-districts}
+```{r largest-districts, eval = FALSE}
 largest <- enr_current |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
   arrange(desc(n_students)) |>
@@ -334,7 +338,7 @@ ggplot(largest, aes(x = district_label, y = n_students)) +
 
 Missouri's total K-12 enrollment has been slowly declining as birth rates drop and families leave for other states.
 
-```{r state-total-trend}
+```{r state-total-trend, eval = FALSE}
 state_total <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL")
 
