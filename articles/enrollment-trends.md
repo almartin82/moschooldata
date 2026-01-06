@@ -23,12 +23,6 @@ colors <- c("total" = "#2C3E50", "white" = "#3498DB", "black" = "#E74C3C",
             "stl" = "#E74C3C", "springfield" = "#3498DB", "columbia" = "#9B59B6")
 ```
 
-``` r
-# Fetch data (single recent year to ensure availability)
-enr <- fetch_enr_multi(2024)
-enr_current <- fetch_enr(2024)
-```
-
 ## 1. St. Louis City: A district in crisis
 
 St. Louis Public Schools has lost over half its enrollment since 2000,
@@ -50,8 +44,6 @@ ggplot(stl_city, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/stl-city-decline-1.png)
-
 ## 2. Kansas City 33: Decades of struggle
 
 Kansas City 33 lost accreditation in 2012 and has struggled to rebuild.
@@ -72,8 +64,6 @@ ggplot(kc, aes(x = end_year, y = n_students)) +
        x = "School Year", y = "Students") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/kc-decline-1.png)
 
 ## 3. St. Louis County: America’s most fragmented
 
@@ -99,8 +89,6 @@ ggplot(stl_county_districts, aes(x = district_label, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/stl-county-fragmentation-1.png)
-
 ## 4. Springfield R-XII holds steady
 
 Springfield, Missouri’s third-largest city, has maintained stable
@@ -120,8 +108,6 @@ ggplot(springfield, aes(x = end_year, y = n_students)) +
        x = "School Year", y = "Students") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/springfield-stable-1.png)
 
 ## 5. KC suburbs boom while urban core shrinks
 
@@ -144,8 +130,6 @@ ggplot(kc_metro, aes(x = end_year, y = n_students, color = district_name)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/kc-suburb-growth-1.png)
-
 ## 6. Missouri is diversifying slowly
 
 The state has shifted from over 80% white to around 70% white, with
@@ -166,8 +150,6 @@ ggplot(demo, aes(x = end_year, y = pct * 100, color = subgroup)) +
        x = "School Year", y = "Percent", color = "") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/demographics-shift-1.png)
 
 ## 7. COVID crushed kindergarten
 
@@ -197,8 +179,6 @@ ggplot(k_trend, aes(x = end_year, y = n_students, color = grade_label)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/covid-kindergarten-1.png)
-
 ## 8. Charter schools limited to KC and STL
 
 Missouri law restricts charter schools to Kansas City and St. Louis, but
@@ -220,8 +200,6 @@ ggplot(charter, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/charter-enrollment-1.png)
-
 ## 9. Columbia grows with the university
 
 Columbia 93, home to the University of Missouri, is one of few
@@ -242,8 +220,6 @@ ggplot(columbia, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/columbia-growth-1.png)
-
 ## 10. Economic disadvantage is widespread
 
 Over 50% of Missouri students qualify as economically disadvantaged,
@@ -261,8 +237,6 @@ ggplot(econ, aes(x = end_year, y = pct * 100)) +
        x = "School Year", y = "Percent") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/econ-disadvantage-1.png)
 
 ## 11. The Ozarks are aging out
 
@@ -287,8 +261,6 @@ ggplot(ozark_districts, aes(x = end_year, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/ozarks-decline-1.png)
-
 ## 12. English learners concentrated in urban areas
 
 English learners are heavily concentrated in Kansas City, St. Louis,
@@ -311,8 +283,6 @@ ggplot(el, aes(x = district_label, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/el-concentration-1.png)
-
 ## 13. Special education serves 14% of students
 
 Missouri’s special education population has grown steadily, now serving
@@ -330,8 +300,6 @@ ggplot(sped, aes(x = end_year, y = pct * 100)) +
        x = "School Year", y = "Percent") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/special-ed-trend-1.png)
 
 ## 14. Largest districts dominate enrollment
 
@@ -355,8 +323,6 @@ ggplot(largest, aes(x = district_label, y = n_students)) +
   theme_readme()
 ```
 
-![](enrollment-trends_files/figure-html/largest-districts-1.png)
-
 ## 15. State total enrollment is declining
 
 Missouri’s total K-12 enrollment has been slowly declining as birth
@@ -375,5 +341,3 @@ ggplot(state_total, aes(x = end_year, y = n_students)) +
        x = "School Year", y = "Students") +
   theme_readme()
 ```
-
-![](enrollment-trends_files/figure-html/state-total-trend-1.png)
