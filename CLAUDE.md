@@ -1,16 +1,58 @@
-## CRITICAL DATA SOURCE RULES
+# moschooldata Package Instructions
+
+## State Schooldata Project (Universal Rules)
+
+This package is part of the 49-state schooldata project. These rules apply to ALL state packages.
+
+### CRITICAL DATA SOURCE RULES
 
 **NEVER use Urban Institute API, NCES CCD, or ANY federal data source** — the entire point of these packages is to provide STATE-LEVEL data directly from state DOEs. Federal sources aggregate/transform data differently and lose state-specific details. If a state DOE source is broken, FIX IT or find an alternative STATE source — do not fall back to federal data.
 
 ---
 
+## Git Workflow (REQUIRED)
 
-# Claude Code Instructions
+### Feature Branch + PR + Auto-Merge Policy
 
-### GIT COMMIT POLICY
-- Commits are allowed
-- NO Claude Code attribution, NO Co-Authored-By trailers, NO emojis
-- Write normal commit messages as if a human wrote them
+**NEVER push directly to main.** All changes must go through PRs with auto-merge:
+
+```bash
+# 1. Create feature branch
+git checkout -b fix/description-of-change
+
+# 2. Make changes, commit
+git add -A
+git commit -m "Fix: description of change"
+
+# 3. Push and create PR with auto-merge
+git push -u origin fix/description-of-change
+gh pr create --title "Fix: description" --body "Description of changes"
+gh pr merge --auto --squash
+
+# 4. Clean up stale branches after PR merges
+git checkout main && git pull && git fetch --prune origin
+```
+
+### Branch Cleanup (REQUIRED)
+
+**Clean up stale branches every time you touch this package:**
+
+```bash
+# Delete local branches merged to main
+git branch --merged main | grep -v main | xargs -r git branch -d
+
+# Prune remote tracking branches
+git fetch --prune origin
+```
+
+### Auto-Merge Requirements
+
+PRs auto-merge when ALL CI checks pass:
+- R-CMD-check (0 errors, 0 warnings)
+- Python tests (if py{st}schooldata exists)
+- pkgdown build (vignettes must render)
+
+If CI fails, fix the issue and push - auto-merge triggers when checks pass.
 
 ---
 
@@ -68,55 +110,15 @@ This package includes `tests/testthat/test-pipeline-live.R` with LIVE network te
 devtools::test(filter = "pipeline-live")
 ```
 
-See `state-schooldata/CLAUDE.md` for complete testing framework documentation.
-
-
 ---
 
-## Git Workflow (REQUIRED)
+## Fidelity Requirement
 
-### Feature Branch + PR + Auto-Merge Policy
-
-**NEVER push directly to main.** All changes must go through PRs with auto-merge:
-
-```bash
-# 1. Create feature branch
-git checkout -b fix/description-of-change
-
-# 2. Make changes, commit
-git add -A
-git commit -m "Fix: description of change"
-
-# 3. Push and create PR with auto-merge
-git push -u origin fix/description-of-change
-gh pr create --title "Fix: description" --body "Description of changes"
-gh pr merge --auto --squash
-
-# 4. Clean up stale branches after PR merges
-git checkout main && git pull && git fetch --prune origin
-```
-
-### Branch Cleanup (REQUIRED)
-
-**Clean up stale branches every time you touch this package:**
-
-```bash
-# Delete local branches merged to main
-git branch --merged main | grep -v main | xargs -r git branch -d
-
-# Prune remote tracking branches
-git fetch --prune origin
-```
-
-### Auto-Merge Requirements
-
-PRs auto-merge when ALL CI checks pass:
-- R-CMD-check (0 errors, 0 warnings)
-- Python tests (if py{st}schooldata exists)
-- pkgdown build (vignettes must render)
-
-If CI fails, fix the issue and push - auto-merge triggers when checks pass.
-
+**tidy=TRUE MUST maintain fidelity to raw, unprocessed data:**
+- Enrollment counts in tidy format must exactly match the wide format
+- No rounding or transformation of counts during tidying
+- Percentages are calculated fresh but counts are preserved
+- State aggregates are sums of school-level data
 
 ---
 
@@ -142,7 +144,7 @@ README images MUST come from pkgdown-generated vignette output so they auto-upda
 
 The Idaho fix revealed critical bugs when README code didn't match vignettes:
 - Wrong district names (lowercase vs ALL CAPS)
-- Text claims that contradicted actual data  
+- Text claims that contradicted actual data
 - Missing data output in examples
 
 ### README Story Structure (REQUIRED)
@@ -165,99 +167,59 @@ The `state-deploy` skill verifies this before deployment:
 
 ### What This Prevents
 
-- ❌ Wrong district/entity names (case sensitivity, typos)
-- ❌ Text claims that contradict data
-- ❌ Broken code that fails silently
-- ❌ Missing data output
-- ✅ Verified, accurate, reproducible examples
-
-### Example
-
-```markdown
-### 1. State enrollment grew 28% since 2002
-
-State added 68,000 students from 2002 to 2026, bucking national trends.
-
-```r
-library(arschooldata)
-library(dplyr)
-
-enr <- fetch_enr_multi(2002:2026)
-
-enr %>%
-  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, n_students) %>%
-  filter(end_year %in% c(2002, 2026)) %>%
-  mutate(change = n_students - lag(n_students),
-         pct_change = round((n_students / lag(n_students) - 1) * 100, 1))
-# Prints: 2002=XXX, 2026=YYY, change=ZZZ, pct=PP.P%
-```
-
-![Chart](https://almartin82.github.io/arschooldata/articles/...)
-```
-
+- Wrong district/entity names (case sensitivity, typos)
+- Text claims that contradict data
+- Broken code that fails silently
+- Missing data output
+- Verified, accurate, reproducible examples
 
 ---
 
-## README and Vignette Code Matching (REQUIRED)
+# moschooldata Package (Missouri)
 
-**CRITICAL RULE (as of 2026-01-08):** ALL code blocks in the README MUST match code in a vignette EXACTLY (1:1 correspondence).
+## Data Source Status
 
-### Why This Matters
+**CURRENT STATUS: DATA SOURCE UNAVAILABLE**
 
-The Idaho fix revealed critical bugs when README code didn't match vignettes:
-- Wrong district names (lowercase vs ALL CAPS)
-- Text claims that contradicted actual data  
-- Missing data output in examples
+The Missouri DESE data source is currently unavailable. The package functions exist but cannot fetch data until the state DOE source is fixed or replaced.
 
-### README Story Structure (REQUIRED)
+**Historical coverage (when source was available):**
+- **Years:** 2006-2024 (19 years)
+- **Students:** ~870,000 students statewide
+- **Districts:** ~550 districts
+- **Schools:** ~2,000 buildings/campuses
 
-Every story/section in the README MUST follow this structure:
+## Missouri Data Notes
 
-1. **Claim**: A factual statement about the data
-2. **Explication**: Brief explanation of why this matters
-3. **Code**: R code that fetches and analyzes the data (MUST exist in a vignette)
-4. **Code Output**: Data table/print statement showing actual values (REQUIRED)
-5. **Visualization**: Chart from vignette (auto-generated from pkgdown)
+### Data Format Differences
 
-### Enforcement
+**Two distinct eras:**
+- **2018-2024:** MCDS Current format (SSRS report format)
+- **2006-2017:** MCDS Legacy format (column differences)
 
-The `state-deploy` skill verifies this before deployment:
-- Extracts all README code blocks
-- Searches vignettes for EXACT matches
-- Fails deployment if code not found in vignettes
-- Randomly audits packages for claim accuracy
+### Missouri-Specific Features
 
-### What This Prevents
+- **County-District Code:** 6 digits (first 3 = county, last 3 = district within county)
+  - Example: 048078 = Jackson County (048) + Kansas City 33 (078)
+- **Building Code:** 4 digits appended to district code
+- **Full Campus ID:** 10 digits (district + building)
+- **Data suppression:** Cells with 5 or fewer students are suppressed
+- **October membership counts:** Enrollment figures are based on October counts
+- **Charter schools:** Limited to Kansas City and St. Louis by state law
 
-- ❌ Wrong district/entity names (case sensitivity, typos)
-- ❌ Text claims that contradict data
-- ❌ Broken code that fails silently
-- ❌ Missing data output
-- ✅ Verified, accurate, reproducible examples
+### Major Districts
 
-### Example
+| District | Code | Notes |
+|----------|------|-------|
+| Kansas City 33 | 048078 | Largest urban district |
+| St. Louis City | 115115 | City school district |
+| Springfield R-XII | 077077 | Third largest district |
+| Columbia 93 | 010004 | University town |
 
-```markdown
-### 1. State enrollment grew 28% since 2002
+## Data Source
 
-State added 68,000 students from 2002 to 2026, bucking national trends.
+**Primary:** Missouri Department of Elementary and Secondary Education (DESE)
+- MCDS Portal: https://apps.dese.mo.gov/MCDS/home.aspx
+- School Data: https://dese.mo.gov/school-data
 
-```r
-library(idschooldata)
-library(dplyr)
-
-enr <- fetch_enr_multi(2002:2026)
-
-enr %>%
-  filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") %>%
-  select(end_year, n_students) %>%
-  filter(end_year %in% c(2002, 2026)) %>%
-  mutate(change = n_students - lag(n_students),
-         pct_change = round((n_students / lag(n_students) - 1) * 100, 1))
-# Prints: 2002=XXX, 2026=YYY, change=ZZZ, pct=PP.P%
-```
-
-![Chart](https://almartin82.github.io/idschooldata/articles/...)
-```
-
+**If this source is broken:** FIX IT or find an alternative STATE source — do not fall back to federal data.
