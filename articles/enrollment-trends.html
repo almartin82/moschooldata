@@ -81,8 +81,9 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"total"</span> <span class="op">=</span> <span class="st">"#2C3E50"</span>, <span class="st">"white"</span> <span class="op">=</span> <span class="st">"#3498DB"</span>, <span class="st">"black"</span> <span class="op">=</span> <span class="st">"#E74C3C"</span>,</span>
-<span>            <span class="st">"hispanic"</span> <span class="op">=</span> <span class="st">"#F39C12"</span>, <span class="st">"asian"</span> <span class="op">=</span> <span class="st">"#9B59B6"</span>, <span class="st">"kc"</span> <span class="op">=</span> <span class="st">"#1ABC9C"</span>,</span>
-<span>            <span class="st">"stl"</span> <span class="op">=</span> <span class="st">"#E74C3C"</span>, <span class="st">"springfield"</span> <span class="op">=</span> <span class="st">"#3498DB"</span>, <span class="st">"columbia"</span> <span class="op">=</span> <span class="st">"#9B59B6"</span><span class="op">)</span></span></code></pre></div>
+<span>            <span class="st">"hispanic"</span> <span class="op">=</span> <span class="st">"#F39C12"</span>, <span class="st">"asian"</span> <span class="op">=</span> <span class="st">"#9B59B6"</span>, <span class="st">"multiracial"</span> <span class="op">=</span> <span class="st">"#1ABC9C"</span>,</span>
+<span>            <span class="st">"kc"</span> <span class="op">=</span> <span class="st">"#16A085"</span>, <span class="st">"stl"</span> <span class="op">=</span> <span class="st">"#C0392B"</span>, <span class="st">"springfield"</span> <span class="op">=</span> <span class="st">"#2980B9"</span>,</span>
+<span>            <span class="st">"columbia"</span> <span class="op">=</span> <span class="st">"#8E44AD"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="st--louis-city-a-district-in-crisis">1. St. Louis City: A district in crisis<a class="anchor" aria-label="anchor" href="#st--louis-city-a-district-in-crisis"></a>
 </h2>
@@ -188,18 +189,19 @@ Summit, Blue Springs, and Park Hill have seen growth.</p>
 <div class="section level2">
 <h2 id="missouri-is-diversifying-slowly">6. Missouri is diversifying slowly<a class="anchor" aria-label="anchor" href="#missouri-is-diversifying-slowly"></a>
 </h2>
-<p>The state has shifted from over 80% white to around 70% white, with
-Hispanic enrollment growing fastest.</p>
+<p>Missouri’s student population has become more diverse over the past
+two decades. The state remains majority-white but with growing Hispanic,
+Asian, and multiracial populations.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">demo</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span><span class="op">)</span><span class="op">)</span></span>
+<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"asian"</span>, <span class="st">"multiracial"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">demo</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">pct</span> <span class="op">*</span> <span class="fl">100</span>, color <span class="op">=</span> <span class="va">subgroup</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">colors</span>,</span>
-<span>                     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Asian"</span>, <span class="st">"Black"</span>, <span class="st">"Hispanic"</span>, <span class="st">"White"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Asian"</span>, <span class="st">"Black"</span>, <span class="st">"Hispanic"</span>, <span class="st">"Multiracial"</span>, <span class="st">"White"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Missouri Student Demographics"</span>,</span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Percent of student population by race/ethnicity"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"School Year"</span>, y <span class="op">=</span> <span class="st">"Percent"</span>, color <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>

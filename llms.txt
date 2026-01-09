@@ -127,13 +127,14 @@ KC suburb growth
 
 ### 6. Missouri is diversifying slowly
 
-The state has shifted from over 80% white to around 70% white, with
-Hispanic enrollment growing fastest.
+Missouri’s student population has become more diverse over the past two
+decades. The state remains majority-white but with growing Hispanic,
+Asian, and multiracial populations.
 
 ``` r
 enr |>
   filter(is_state, grade_level == "TOTAL",
-         subgroup %in% c("white", "black", "hispanic", "asian")) |>
+         subgroup %in% c("white", "black", "hispanic", "asian", "multiracial")) |>
   mutate(pct = round(pct * 100, 1)) |>
   select(end_year, subgroup, n_students, pct)
 ```
