@@ -38,8 +38,9 @@ theme_readme <- function() {
 }
 
 colors <- c("total" = "#2C3E50", "white" = "#3498DB", "black" = "#E74C3C",
-            "hispanic" = "#F39C12", "asian" = "#9B59B6", "kc" = "#1ABC9C",
-            "stl" = "#E74C3C", "springfield" = "#3498DB", "columbia" = "#9B59B6")
+            "hispanic" = "#F39C12", "asian" = "#9B59B6", "multiracial" = "#1ABC9C",
+            "kc" = "#16A085", "stl" = "#C0392B", "springfield" = "#2980B9",
+            "columbia" = "#8E44AD")
 ```
 
 ```{r fetch-data, eval = FALSE, include = FALSE}
@@ -153,18 +154,18 @@ ggplot(kc_metro, aes(x = end_year, y = n_students, color = district_name)) +
 
 ## 6. Missouri is diversifying slowly
 
-The state has shifted from over 80% white to around 70% white, with Hispanic enrollment growing fastest.
+Missouri's student population has become more diverse over the past two decades. The state remains majority-white but with growing Hispanic, Asian, and multiracial populations.
 
 ```{r demographics-shift, eval = FALSE}
 demo <- enr |>
   filter(is_state, grade_level == "TOTAL",
-         subgroup %in% c("white", "black", "hispanic", "asian"))
+         subgroup %in% c("white", "black", "hispanic", "asian", "multiracial"))
 
 ggplot(demo, aes(x = end_year, y = pct * 100, color = subgroup)) +
   geom_line(linewidth = 1.2) +
   geom_point(size = 2.5) +
   scale_color_manual(values = colors,
-                     labels = c("Asian", "Black", "Hispanic", "White")) +
+                     labels = c("Asian", "Black", "Hispanic", "Multiracial", "White")) +
   labs(title = "Missouri Student Demographics",
        subtitle = "Percent of student population by race/ethnicity",
        x = "School Year", y = "Percent", color = "") +
